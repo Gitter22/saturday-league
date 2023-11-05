@@ -14,6 +14,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
 import { Outlet } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import SportsGymnasticsIcon from "@mui/icons-material/SportsGymnastics";
 
 function refreshMessages(): MessageExample[] {
   const getRandomInt = (max: number) =>
@@ -60,21 +64,26 @@ export default function FixedBottomNavigation() {
         >
           <BottomNavigationAction
             label="Matches"
-            icon={<RestoreIcon />}
+            icon={<SportsSoccerIcon />}
             component={Link}
             to="/matches"
           />
           <BottomNavigationAction
             label="Leagues"
-            icon={<FavoriteIcon />}
+            icon={<EmojiEventsIcon />}
             component={Link}
             to="/leagues"
           />
           <BottomNavigationAction
             label="Players"
-            icon={<ArchiveIcon />}
+            icon={<SportsGymnasticsIcon />}
             component={Link}
             to="/players"
+          />
+          <BottomNavigationAction
+            label="Menu"
+            icon={<MenuIcon />}
+            // to="/leagues"
           />
         </BottomNavigation>
       </Paper>

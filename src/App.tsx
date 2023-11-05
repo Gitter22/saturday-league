@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import AppLayout from "./components/layouts/AppLayout";
 import Leagues from "./features/leagues/views/Leagues";
 import Tournament from "./features/tournaments/views/Tournament";
+import MatchesHome from "./features/matches/views";
 
 function App() {
   return (
@@ -11,7 +12,7 @@ function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Navigate to="/matches" />} />
-          <Route path="matches" element={<div>Matches</div>} />
+          <Route path="matches" element={<MatchesHome />} />
           <Route path="leagues" element={<Leagues />} />
           <Route path="players" element={<div>Players Page</div>} />
         </Route>

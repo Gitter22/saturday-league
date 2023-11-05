@@ -8,8 +8,14 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Button, Container } from "@mui/material";
+import { Button, Tab, Tabs } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import SwipeableViews from "react-swipeable-views";
+import { useTheme } from "@mui/material/styles";
+import LeagueStandings from "../components/LeagueStandings";
+import Matches from "../components/Matches";
+import TopPlayers from "../components/Top Players";
+import LeagueDetails from "../components/Details";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -21,9 +27,55 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   },
 }));
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  dir?: string;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `full-width-tab-${index}`,
+    "aria-controls": `full-width-tabpanel-${index}`,
+  };
+}
+
 export default function Tournament() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const theme = useTheme();
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  const handleChangeIndex = (index: number) => {
+    setValue(index);
+  };
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -61,11 +113,39 @@ export default function Tournament() {
               <MoreIcon />
             </IconButton>
           </StyledToolbar>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            indicatorColor="secondary"
+            textColor="inherit"
+            variant="fullWidth"
+            aria-label="full width tabs example"
+          >
+            <Tab label="Details" {...a11yProps(0)} />
+            <Tab label="Standings" {...a11yProps(1)} />
+            <Tab label="Matches" {...a11yProps(2)} />
+            <Tab label="Top players" {...a11yProps(2)} />
+          </Tabs>
         </AppBar>
+        <SwipeableViews
+          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+          index={value}
+          onChangeIndex={handleChangeIndex}
+        >
+          <TabPanel value={value} index={0} dir={theme.direction}>
+            <LeagueDetails />
+          </TabPanel>
+          <TabPanel value={value} index={1} dir={theme.direction}>
+            <LeagueStandings />
+          </TabPanel>
+          <TabPanel value={value} index={2} dir={theme.direction}>
+            <Matches />
+          </TabPanel>
+          <TabPanel value={value} index={3} dir={theme.direction}>
+            <TopPlayers />
+          </TabPanel>
+        </SwipeableViews>
       </Box>
-      <Container>
-        <h3>Hello</h3>
-      </Container>
     </>
   );
 }
