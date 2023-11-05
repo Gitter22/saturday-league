@@ -1,5 +1,4 @@
 import { Box, Typography, styled } from "@mui/material";
-import React from "react";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";

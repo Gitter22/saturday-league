@@ -1,4 +1,3 @@
-import * as React from "react";
 import { BrowserRouter, Navigate } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 import AppLayout from "./components/layouts/AppLayout";

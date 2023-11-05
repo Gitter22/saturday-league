@@ -1,4 +1,3 @@
-import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -16,6 +15,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import React from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

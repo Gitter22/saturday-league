@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -178,7 +177,7 @@ function EnhancedTableToolbar() {
   );
 }
 export default function LeagueStandings() {
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {};
+  // const handleClick = (event: React.MouseEvent<unknown>, id: number) => {};
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -197,7 +196,7 @@ export default function LeagueStandings() {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    // onClick={(event) => handleClick(event, row.id)}
                     tabIndex={-1}
                     key={row.id}
                     sx={{ cursor: "pointer" }}
