@@ -4,20 +4,28 @@ import AppLayout from "./components/layouts/AppLayout";
 import Leagues from "./features/leagues/views/Leagues";
 import Tournament from "./features/tournaments/views/Tournament";
 import MatchesHome from "./features/matches/views";
+import AddMatch from "./features/tournaments/components/Matches/AddMatch/AddMatch";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import MatchDetail from "./features/matches/views/MatchDetail";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Navigate to="/matches" />} />
-          <Route path="matches" element={<MatchesHome />} />
-          <Route path="leagues" element={<Leagues />} />
-          <Route path="players" element={<div>Players Page</div>} />
-        </Route>
-        <Route path="/tournament/:id" element={<Tournament />} />
-      </Routes>
-    </BrowserRouter>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<Navigate to="/matches" />} />
+            <Route path="matches" element={<MatchesHome />} />
+            <Route path="leagues" element={<Leagues />} />
+            <Route path="players" element={<div>Players Page</div>} />
+          </Route>
+          <Route path="/tournament/:id" element={<Tournament />} />
+          <Route path="/tournament/:id/add-match" element={<AddMatch />} />
+          <Route path="/match/:id" element={<MatchDetail />} />
+        </Routes>
+      </BrowserRouter>
+    </LocalizationProvider>
   );
 }
 

@@ -11,11 +11,9 @@ import { Button, Menu, MenuItem, Tab, Tabs } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
-import LeagueStandings from "../components/LeagueStandings";
-import Matches from "../components/Matches";
-import TopPlayers from "../components/Top Players";
-import LeagueDetails from "../components/Details";
 import React from "react";
+import MatchBasicDetails from "../components/MatchBasicDetails";
+import Lineups from "../components/Lineups";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -61,7 +59,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function Tournament() {
+export default function MatchDetail() {
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -105,13 +103,13 @@ export default function Tournament() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <p>Edit League</p>
+        <p>Edit Match Details</p>
       </MenuItem>
       <MenuItem onClick={() => navigate("./add-match")}>
-        <p>Add Match</p>
+        <p>Edit Lineups</p>
       </MenuItem>
       <MenuItem>
-        <p>Add Player</p>
+        <p>Edit Result</p>
       </MenuItem>
     </Menu>
   );
@@ -135,10 +133,7 @@ export default function Tournament() {
             component="div"
             sx={{ flexGrow: 1, alignSelf: "flex-end" }}
           >
-            <Button color="inherit" onClick={() => navigate("/")}>
-              Back
-            </Button>
-            Saturday League
+            28th Nov Sat 7-8am
           </Typography>
           <IconButton size="large" aria-label="search" color="inherit">
             <SearchIcon />
@@ -162,9 +157,7 @@ export default function Tournament() {
           aria-label="full width tabs example"
         >
           <Tab label="Details" {...a11yProps(0)} />
-          <Tab label="Standings" {...a11yProps(1)} />
-          <Tab label="Matches" {...a11yProps(2)} />
-          <Tab label="Top players" {...a11yProps(2)} />
+          <Tab label="Lineups" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -173,16 +166,10 @@ export default function Tournament() {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <LeagueDetails />
+          <MatchBasicDetails />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <LeagueStandings />
-        </TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
-          <Matches />
-        </TabPanel>
-        <TabPanel value={value} index={3} dir={theme.direction}>
-          <TopPlayers />
+          <Lineups />
         </TabPanel>
       </SwipeableViews>
       {renderMobileMenu}
