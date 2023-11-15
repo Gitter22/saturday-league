@@ -1,7 +1,6 @@
-import Matches from "../../tournaments/components/Matches";
-
+import MatchList from "../components/MatchList";
 const MatchesHome = () => {
-  return <Matches />;
+  return <MatchList />;
 };
 
 export default MatchesHome;

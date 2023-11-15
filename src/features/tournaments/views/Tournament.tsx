@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 import LeagueStandings from "../components/LeagueStandings";
-import Matches from "../components/Matches";
+import Matches from "../../matches/views/index";
 import TopPlayers from "../components/Top Players";
 import LeagueDetails from "../components/Details";
 import React from "react";

@@ -21,7 +21,6 @@ export default function FixedBottomNavigation() {
   return (
     <Box sx={{ pb: 7 }} ref={ref}>
       <CssBaseline />
-
       <Paper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
         elevation={3}
@@ -54,7 +53,8 @@ export default function FixedBottomNavigation() {
           <BottomNavigationAction
             label="Menu"
             icon={<MenuIcon />}
-            // to="/leagues"
+            component={Link}
+            to="/menu"
           />
         </BottomNavigation>
       </Paper>
