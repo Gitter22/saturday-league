@@ -4,10 +4,8 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Button, Menu, MenuItem, Tab, Tabs } from "@mui/material";
+import { Avatar, Menu, MenuItem, Stack, Tab, Tabs } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
@@ -15,7 +13,11 @@ import LeagueStandings from "../components/LeagueStandings";
 import Matches from "../../matches/views/index";
 import TopPlayers from "../components/Top Players";
 import LeagueDetails from "../components/Details";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import React from "react";
+import { getRandomSeason } from "../../shared/constants";
+import { getSeasonName } from "../../leagues/support";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -23,7 +25,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   paddingBottom: theme.spacing(2),
   // Override media queries injected by theme.mixins.toolbar
   "@media all": {
-    minHeight: 128,
+    minHeight: 100,
   },
 }));
 
@@ -45,11 +47,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 0 }}>{children}</Box>}
     </div>
   );
 }
@@ -63,6 +61,7 @@ function a11yProps(index: number) {
 
 export default function Tournament() {
   const navigate = useNavigate();
+  const season = getRandomSeason();
 
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -87,7 +86,7 @@ export default function Tournament() {
     setMobileMoreAnchorEl(null);
   };
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const mobileMenuId = "tournament-home-mobile-menu";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -124,25 +123,30 @@ export default function Tournament() {
             size="large"
             edge="start"
             color="inherit"
-            aria-label="open drawer"
+            aria-label="navigate-back"
             sx={{ mr: 2 }}
+            onClick={() => navigate(-1)}
           >
-            <MenuIcon />
+            <ArrowBackIcon />
           </IconButton>
-          <Typography
-            variant="h5"
-            noWrap
-            component="div"
-            sx={{ flexGrow: 1, alignSelf: "flex-end" }}
+          <Stack
+            direction="row"
+            sx={{ flexGrow: 1, alignSelf: "flex-end", alignItems: "center" }}
+            spacing={1}
           >
-            <Button color="inherit" onClick={() => navigate("/")}>
-              Back
-            </Button>
-            Saturday League
-          </Typography>
-          <IconButton size="large" aria-label="search" color="inherit">
-            <SearchIcon />
-          </IconButton>
+            <Avatar
+              src={season.tournament.logo}
+              sx={{ backgroundColor: "white" }}
+            />
+            <Box>
+              <Typography variant="h6" noWrap component="div">
+                {season.tournament.name}
+              </Typography>
+              <Typography variant="subtitle2" noWrap component="div">
+                {getSeasonName(season)}
+              </Typography>
+            </Box>
+          </Stack>
           <IconButton
             size="large"
             aria-label="display more actions"

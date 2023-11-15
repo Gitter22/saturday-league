@@ -7,16 +7,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { ListItem } from "@mui/material";
 import { getSeasonList } from "../../shared/constants";
-import { ISeason } from "../../shared/types";
-import dayjs from "dayjs";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
+import { getSeasonName } from "../support";
 
-const getSeasonName = (season: ISeason) => {
-  return `Season ${season.editionNumber} (${dayjs(season.start).format(
-    "DD MMM YY"
-  )}
-   - ${dayjs(season.end).format("DD MMM YY")})`;
-};
 const Leagues = () => {
   const navigate = useNavigate();
   const seasonList = getSeasonList(5);

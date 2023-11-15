@@ -1,5 +1,4 @@
 import { Divider, Typography, Stack } from "@mui/material";
-import React from "react";
 
 const MatchBasicDetails = () => {
   return (

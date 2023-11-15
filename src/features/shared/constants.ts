@@ -26,6 +26,8 @@ import chelsealarge from '../../assets/teams/150/chelsea.png'
 import liverpoollarge from '../../assets/teams/150/liverpool.png'
 import mancitylarge from '../../assets/teams/150/mancity.png'
 import manularge from '../../assets/teams/150/manu.png'
+import leagueLogo from "../../assets/leagues/premierleague.png"
+
 
 
 const users: string[] = ['Aadil', 'Robin', 'Keval', 'Deepak', 'Pranav', 'Ishan', 'Kenil', 'Sarath', 'Harsh', 'Gunjan', 'Jyot']
@@ -148,6 +150,7 @@ export const getRandomTournament = (): ITournament => {
         id: getRandomNumberInRange(0, 125).toString(),
         name: names[getRandomNumberInRange(0, names.length - 1)],
         type: Math.random() > 0.5 ? 'league' : 'cup',
+        logo: leagueLogo
     }
 }
 
@@ -255,7 +258,6 @@ export const getRandomMatch = (): IMatch => {
     const team2 = getRandomMatchTeam()
     const status = getRandomMatchStatus()
     const startTime = getRandomDate('past')
-    console.log("🚀 ~ file: constants.ts:245 ~ getRandomMatch ~ startTime:", startTime)
     const endTime = dayjs(startTime).add(1, 'hours').toISOString()
 
     return {

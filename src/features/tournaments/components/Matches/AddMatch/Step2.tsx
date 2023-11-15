@@ -1,26 +1,14 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  ButtonGroup,
-  IconButton,
-  Paper,
-  Stack,
-  TextField,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import SendIcon from "@mui/icons-material/Send";
 import * as React from "react";
 
-import PlayerList from "./PlayerList";
+import PlayerList from "../../../../matches/components/PlayerList";
 
 const Step2 = () => {
   const [open, setOpen] = React.useState(false);
