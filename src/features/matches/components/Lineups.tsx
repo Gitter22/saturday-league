@@ -15,7 +15,7 @@ import ListItemText from "@mui/material/ListItemText";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import SendIcon from "@mui/icons-material/Send";
 import * as React from "react";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
 import PlayerList from "./PlayerList";
 import Pitch from "./Pitch";
@@ -34,7 +34,7 @@ const Lineups = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  function handleDragEnd(event: any) {
+  function handleDragEnd(event: DragEndEvent) {
     if (event.over && event.over.id === "droppable") {
       setIsDropped(true);
     }

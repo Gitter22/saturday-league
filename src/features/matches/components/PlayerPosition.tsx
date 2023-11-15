@@ -1,16 +1,16 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { Box } from "@mui/material";
 import { useDroppable } from "@dnd-kit/core";
 
 interface IPlayerPosition {
-  position: {
+  position?: {
     teamPosition: 1 | 2;
     top: string;
     left: string;
   };
 }
 
-const PlayerPosition: React.FC<IPlayerPosition> = () => {
+const PlayerPosition: React.FC<PropsWithChildren<IPlayerPosition>> = () => {
   const { isOver, setNodeRef } = useDroppable({
     id: "droppable",
   });
