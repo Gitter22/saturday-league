@@ -15,8 +15,12 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import FormControl from "@mui/material/FormControl";
 import { useNavigate } from "react-router-dom";
+import { getVenueList } from "../../../../shared/constants";
 
 export default function AddMatch() {
+  const venues = getVenueList();
+  console.log("🚀 ~ file: AddMatch.tsx:22 ~ AddMatch ~ venues:", venues);
+
   const navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -50,18 +54,18 @@ export default function AddMatch() {
                 bgcolor: "background.default",
               }}
             >
-              <Typography>Match Details</Typography>
+              <Typography variant="subtitle2">Match Details</Typography>
             </Paper>
           </Box>
           <FormControl fullWidth>
-            <Stack direction="column" spacing={1}>
+            <Stack direction="column" spacing={3}>
               <Autocomplete
+                getOptionLabel={({ name }) => name}
                 disablePortal
-                id="combo-box-demo"
-                options={top100Films}
-                sx={{ width: 300 }}
+                id="venue-selector"
+                options={venues}
                 renderInput={(params) => (
-                  <TextField {...params} label="Movie" />
+                  <TextField {...params} label="Venue" />
                 )}
               />
               <MobileDatePicker
