@@ -1,22 +1,35 @@
 import React, { PropsWithChildren } from "react";
-import { Box } from "@mui/material";
+import { Avatar, Badge, Box } from "@mui/material";
 import { useDroppable } from "@dnd-kit/core";
+import { IPosition } from "../formations";
+import { IUser } from "../../shared/types";
+import {
+  PitchPlayer,
+  PlayerSelectorItem,
+  PositionInfo,
+} from "./PlayerSelector";
+import { getRandomUser } from "../../shared/constants";
 
-interface IPlayerPosition {
-  position?: {
-    teamPosition: 1 | 2;
-    top: string;
-    left: string;
-  };
+interface IPitchPosition {
+  position: IPosition;
+  teamPosition: number;
+  player: IUser | null;
 }
 
-const PlayerPosition: React.FC<PropsWithChildren<IPlayerPosition>> = () => {
+const PitchPosition: React.FC<PropsWithChildren<IPitchPosition>> = ({
+  formation,
+  position,
+  teamPosition,
+  player,
+}) => {
   const { isOver, setNodeRef } = useDroppable({
-    id: "droppable",
+    id: "position",
   });
   const style = {
-    backgroundColor: isOver ? "green" : "gray",
+    // backgroundColor: isOver ? "green" : "gray",
   };
+  const top = teamPosition === 1 ? position.top : 100 - position.top;
+  const left = teamPosition === 1 ? position.left : 100 - position.left;
   return (
     <Box
       ref={setNodeRef}
@@ -24,14 +37,19 @@ const PlayerPosition: React.FC<PropsWithChildren<IPlayerPosition>> = () => {
         position: "absolute",
         width: 50,
         height: 50,
-        top: "50%",
-        left: "50%",
-        borderRadius: "50%",
+        top: `${top}%`,
+        left: `${left}%`,
         transform: `translate(-50%, -50%)`,
         ...style,
       }}
-    />
+    >
+      {player ? (
+        <PitchPlayer player={player} showRatings={false} />
+      ) : (
+        <PositionInfo position={position} />
+      )}
+    </Box>
   );
 };
 
-export default PlayerPosition;
+export default PitchPosition;

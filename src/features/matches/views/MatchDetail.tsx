@@ -13,7 +13,8 @@ import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 import React from "react";
 import MatchBasicDetails from "../components/MatchBasicDetails";
-import Lineups from "../components/Lineups";
+import Lineups from "../components/EditLineups";
+import ViewLineups from "../components/ViewLineups";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -101,7 +102,7 @@ export default function MatchDetail() {
       <MenuItem>
         <p>Edit Match Details</p>
       </MenuItem>
-      <MenuItem onClick={() => navigate("./add-match")}>
+      <MenuItem onClick={() => navigate("/edit-lineups")}>
         <p>Edit Lineups</p>
       </MenuItem>
       <MenuItem>
@@ -165,7 +166,7 @@ export default function MatchDetail() {
           <MatchBasicDetails />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <Lineups />
+          <ViewLineups />
         </TabPanel>
       </SwipeableViews>
       {renderMobileMenu}

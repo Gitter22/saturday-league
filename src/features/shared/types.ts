@@ -9,8 +9,12 @@ export interface IClub {
     name: string,
     shortName: string,
     logo: {
-        small: string | null
-        large: string | null
+        small: string | undefined
+        large: string | undefined
+    },
+    colors?: {
+        primary?: string,
+        secondary?: string
     }
 }
 

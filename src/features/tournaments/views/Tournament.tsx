@@ -11,13 +11,14 @@ import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 import LeagueStandings from "../components/LeagueStandings";
 import Matches from "../../matches/views/index";
-import TopPlayers from "../components/Top Players";
-import LeagueDetails from "../components/Details";
+// import TopPlayers from "../components/Top Players";
+// import LeagueDetails from "../components/Details";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import React from "react";
 import { getRandomSeason } from "../../shared/constants";
 import { getSeasonName } from "../../leagues/support";
+import UnderConstruction from "../../../components/ui/UnderConstruction";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   alignItems: "flex-start",
@@ -177,7 +178,8 @@ export default function Tournament() {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <LeagueDetails />
+          <UnderConstruction />
+          {/* <LeagueDetails /> */}
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <LeagueStandings />
@@ -186,7 +188,8 @@ export default function Tournament() {
           <Matches />
         </TabPanel>
         <TabPanel value={value} index={3} dir={theme.direction}>
-          <TopPlayers />
+          <UnderConstruction />
+          {/* <TopPlayers /> */}
         </TabPanel>
       </SwipeableViews>
       {renderMobileMenu}

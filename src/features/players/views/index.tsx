@@ -1,6 +1,7 @@
 import UnderConstruction from "../../../components/ui/UnderConstruction";
-const AppMenu = () => {
+
+const Players = () => {
   return <UnderConstruction />;
 };
 
-export default AppMenu;
+export default Players;

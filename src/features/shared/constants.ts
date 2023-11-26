@@ -27,6 +27,7 @@ import liverpoollarge from '../../assets/teams/150/liverpool.png'
 import mancitylarge from '../../assets/teams/150/mancity.png'
 import manularge from '../../assets/teams/150/manu.png'
 import leagueLogo from "../../assets/leagues/premierleague.png"
+import { formations } from "../matches/formations"
 
 
 
@@ -50,8 +51,8 @@ export const getFormationList = (): Formation[] => {
 }
 
 export const getRandomFormation = (): Formation => {
-    const formations = getFormationList()
-    return formations[getRandomNumberInRange(0, formations.length - 1)]
+    const formationsArray = Object.keys(formations)
+    return formationsArray[getRandomNumberInRange(0, formationsArray.length)]
 }
 
 export const getPositionList = (): Position[] => {
@@ -61,7 +62,7 @@ export const getPositionList = (): Position[] => {
 
 export const getRandomPosition = (): Position => {
     const positions = getPositionList()
-    return positions[getRandomNumberInRange(0, positions.length - 1)]
+    return positions[getRandomNumberInRange(0, positions.length)]
 }
 
 
@@ -76,6 +77,10 @@ export const getClubList = (): IClub[] => {
             logo: {
                 small: arsenalsmall,
                 large: arsenallarge
+            },
+            colors: {
+                primary: '#EF0107',
+                secondary: '#FFFFFF'
             }
         },
         {
@@ -85,6 +90,10 @@ export const getClubList = (): IClub[] => {
             logo: {
                 small: manusmall,
                 large: manularge
+            },
+            colors: {
+                primary: '#DA291C',
+                secondary: "#FBE122"
             }
         },
         {
@@ -94,6 +103,10 @@ export const getClubList = (): IClub[] => {
             logo: {
                 small: mancitysmall,
                 large: mancitylarge
+            },
+            colors: {
+                primary: '#6CADDF',
+                secondary: '#FFFFFF'
             }
         },
         {
@@ -103,7 +116,12 @@ export const getClubList = (): IClub[] => {
             logo: {
                 small: liverpoolsmall,
                 large: liverpoollarge
-            }
+            },
+            colors: {
+                primary: '#C8102E',
+                secondary: '#00B2A9'
+            },
+
         },
         {
             id: '5',
@@ -112,6 +130,9 @@ export const getClubList = (): IClub[] => {
             logo: {
                 small: chelseasmall,
                 large: chelsealarge
+            },
+            colors: {
+                primary: '#034694'
             }
         },
     ]
@@ -120,7 +141,7 @@ export const getClubList = (): IClub[] => {
 
 export const getRandomClub = () => {
     const clubList = getClubList()
-    return clubList[getRandomNumberInRange(0, clubList.length - 1)]
+    return clubList[getRandomNumberInRange(0, clubList.length)]
 }
 
 export const getVenueList = () => {
@@ -141,14 +162,14 @@ export const getVenueList = () => {
 }
 export const getRandomVenue = (): IVenue => {
     const venues = getVenueList()
-    return venues[getRandomNumberInRange(0, venues.length - 1)]
+    return venues[getRandomNumberInRange(0, venues.length)]
 }
 
 export const getRandomTournament = (): ITournament => {
     const names = ['Saturday League', 'MidWeek Football', 'Linde Group']
     return {
         id: getRandomNumberInRange(0, 125).toString(),
-        name: names[getRandomNumberInRange(0, names.length - 1)],
+        name: names[getRandomNumberInRange(0, names.length)],
         type: Math.random() > 0.5 ? 'league' : 'cup',
         logo: leagueLogo
     }
@@ -173,14 +194,14 @@ export const getSeasonList = (length: number = 5): ISeason[] => {
 }
 
 export const getRandomUser = (): IUser => {
-    const randomIndex = getRandomNumberInRange(0, users.length - 1)
+    const randomIndex = getRandomNumberInRange(0, users.length)
     return {
         id: getRandomNumberInRange(0, 500).toString(),
         username: users[randomIndex],
         kitNumber: getRandomNumberInRange(0, 11),
         favClub: getRandomClub(),
         displayName: users[randomIndex],
-        captaincyTeamName: captaincyNames[getRandomNumberInRange(0, captaincyNames.length - 1)],
+        captaincyTeamName: captaincyNames[getRandomNumberInRange(0, captaincyNames.length)],
         createdAt: null,
         updatedAt: null,
         preferredPositions: [getRandomPosition(), getRandomPosition(), getRandomPosition()]
