@@ -19,7 +19,6 @@ import { getVenueList } from "../../../../shared/constants";
 
 export default function AddMatch() {
   const venues = getVenueList();
-  console.log("🚀 ~ file: AddMatch.tsx:22 ~ AddMatch ~ venues:", venues);
 
   const navigate = useNavigate();
   return (

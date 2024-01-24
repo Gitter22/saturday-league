@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Autocomplete,
   Avatar,
   Box,
   Button,
@@ -7,6 +8,7 @@ import {
   Paper,
   Select,
   Stack,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -24,20 +26,72 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PlayerList from "./PlayerList";
 import Pitch from "./Pitch";
 import Draggable from "./Draggable";
-import PlayerPosition from "./PlayerPosition";
+import PitchPosition from "./PlayerPosition";
 import { useNavigate } from "react-router-dom";
 import PlayerSelector from "./PlayerSelector";
-import { formations } from "../formations";
+import { IFormation, IPosition, formations } from "../formations";
 import {
+  getFormationList,
   getRandomMatch,
   getRandomMatchTeam,
+  getSeasonPlayerList,
   getUserList,
 } from "../../shared/constants";
+import {
+  IMatch,
+  IMatchPlayer,
+  IMatchTeam,
+  ISeasonPlayer,
+  IUser,
+} from "../../shared/types";
 
+// const createLineUp = (matchTeam: IMatchTeam) => {
+//   if (matchTeam.formation) {
+//     const teamformation = formations[matchTeam.formation];
+
+//     const postionWithPlayer = teamformation.positions.map((pitchPosition) => {
+//       return {
+//         ...pitchPosition,
+//         player: matchTeam.lineup
+//           ? matchTeam.lineup.find(
+//               (player) => player.position == pitchPosition.id
+//             )
+//           : undefined,
+//       };
+//     });
+
+//     return {
+//       ...teamformation,
+//       positions: postionWithPlayer,
+//     };
+//   } else {
+//     return null;
+//   }
+// };
+interface IPositionPlayer extends IPosition {
+  player?: IMatchPlayer | null;
+}
+interface ILineUp extends Omit<IFormation, "positions"> {
+  positions: IPositionPlayer[];
+  teamPosition: 1 | 2;
+}
 const EditLineups = () => {
+  const formationIds = getFormationList();
   const navigate = useNavigate();
+  const [team1Lineup, setTeam1LineUp] = React.useState<ILineUp>({
+    id: "",
+    teamPosition: 1,
+    players: 0,
+    positions: [],
+  });
+  const [team2Lineup, setTeam2LineUp] = React.useState<ILineUp>({
+    id: "",
+    teamPosition: 2,
+    players: 0,
+    positions: [],
+  });
 
-  const users = getUserList(14);
+  const players = getSeasonPlayerList(14);
 
   const [open, setOpen] = React.useState(false);
   const [isDropped, setIsDropped] = React.useState(false);
@@ -51,14 +105,50 @@ const EditLineups = () => {
     setOpen(false);
   };
   function handleDragEnd(event: DragEndEvent) {
-    if (event.over && event.over.id === "droppable") {
-      setIsDropped(true);
+    const { active, over } = event;
+    if (!over) {
+      return;
+    }
+    const updaterFunction = (
+      lineup: ILineUp,
+      currentPlayer: ISeasonPlayer,
+      currentPosition: string
+    ): ILineUp => {
+      return {
+        ...lineup,
+        positions: lineup.positions.map((position) => {
+          if (position.id === currentPosition) {
+            return {
+              ...position,
+              player: currentPlayer,
+            };
+          } else {
+            return position;
+          }
+        }),
+      };
+    };
+    const player = players.find((p) => p.id == active.id);
+    const [teamposition, playerposition] =
+      typeof over.id === "string" ? over.id.split(":") : [];
+    if (Number(teamposition) === 1) {
+      setTeam1LineUp((lineup) =>
+        updaterFunction(lineup, player, playerposition)
+      );
+    } else {
+      setTeam2LineUp((lineup) =>
+        updaterFunction(lineup, player, playerposition)
+      );
     }
   }
-  const team1Formation = formations["2-3-1"];
-  const team2Formation = formations["2-2-1"];
-
-  const match = getRandomMatch();
+  const handleFormationChange = (formationId: string, teamPosition: 1 | 2) => {
+    const formation = formations[formationId];
+    if (teamPosition === 1) {
+      setTeam1LineUp({ ...formation, teamPosition });
+    } else {
+      setTeam2LineUp({ ...formation, teamPosition });
+    }
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -93,33 +183,74 @@ const EditLineups = () => {
           <Typography>Select Teams</Typography>
         </Paper>
 
+        <Box p={1}>
+          <Stack
+            direction={"column"}
+            alignContent={"center"}
+            // justifyContent={"space-evenly"}
+            spacing={1}
+          >
+            <Typography>Team 1</Typography>
+
+            <Autocomplete
+              fullWidth
+              // getOptionLabel={({ name }) => name}
+              disablePortal
+              id="formation-selector"
+              options={formationIds}
+              renderInput={(params) => (
+                <TextField {...params} label="Formation" />
+              )}
+              onChange={(_, value) => handleFormationChange(value as string, 1)}
+            />
+          </Stack>
+        </Box>
         <DndContext onDragEnd={handleDragEnd}>
-          <Box p={1}>
-            Team 1
-            <Select placeholder="formation" size="small" />
-          </Box>
-          <PlayerSelector players={users} />
+          <PlayerSelector players={players} />
           <Pitch>
-            {match.team1.lineup.map((player) => (
-              <PlayerPosition
-                formation={match.team1.formation}
-                position={player.position}
-                teamPosition={1}
-                key={`1-${player.position}`}
-                player={player}
-              />
-            ))}
-            {match.team2.lineup.map((player) => (
-              <PlayerPosition
-                formation={match.team2.formation}
-                position={player.position}
-                teamPosition={2}
-                key={`2-${player.position}`}
-                player={player}
-              />
-            ))}
+            {team1Lineup && Array.isArray(team1Lineup.positions)
+              ? team1Lineup.positions.map((position) => (
+                  <PitchPosition
+                    position={position}
+                    teamPosition={1}
+                    key={`1-${position.id}`}
+                  />
+                ))
+              : null}
+            {team2Lineup && Array.isArray(team2Lineup.positions)
+              ? team2Lineup.positions.map((position) => (
+                  <PitchPosition
+                    position={position}
+                    teamPosition={2}
+                    key={`2-${position.id}`}
+                  />
+                ))
+              : null}
           </Pitch>
+          <PlayerSelector players={players} />
         </DndContext>
+        <Box p={1}>
+          <Stack
+            direction={"column"}
+            alignContent={"center"}
+            // justifyContent={"space-evenly"}
+            spacing={1}
+          >
+            <Typography>Team 2</Typography>
+
+            <Autocomplete
+              fullWidth
+              // getOptionLabel={({ name }) => name}
+              disablePortal
+              id="formation-selector"
+              options={formationIds}
+              renderInput={(params) => (
+                <TextField {...params} label="Formation" />
+              )}
+              onChange={(_, value) => handleFormationChange(value as string, 2)}
+            />
+          </Stack>
+        </Box>
         <Box p={1}>
           <Button variant="contained" fullWidth onClick={handleClickOpen}>
             Save Lineup

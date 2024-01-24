@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 import { Avatar, Badge, Box } from "@mui/material";
 import { useDroppable } from "@dnd-kit/core";
 import { IPosition } from "../formations";
-import { IUser } from "../../shared/types";
+import { IMatchPlayer, IUser } from "../../shared/types";
 import {
   PitchPlayer,
   PlayerSelectorItem,
@@ -10,24 +10,25 @@ import {
 } from "./PlayerSelector";
 import { getRandomUser } from "../../shared/constants";
 
+interface IPitchPositionPlayer extends IPosition {
+  player?: IMatchPlayer | null;
+}
 interface IPitchPosition {
-  position: IPosition;
+  position: IPitchPositionPlayer;
   teamPosition: number;
-  player: IUser | null;
 }
 
 const PitchPosition: React.FC<PropsWithChildren<IPitchPosition>> = ({
-  formation,
   position,
   teamPosition,
-  player,
 }) => {
   const { isOver, setNodeRef } = useDroppable({
-    id: "position",
+    id: `${teamPosition}:${position.id}`,
+    data: {
+      type: "pitchposition",
+    },
   });
-  const style = {
-    // backgroundColor: isOver ? "green" : "gray",
-  };
+
   const top = teamPosition === 1 ? position.top : 100 - position.top;
   const left = teamPosition === 1 ? position.left : 100 - position.left;
   return (
@@ -40,13 +41,12 @@ const PitchPosition: React.FC<PropsWithChildren<IPitchPosition>> = ({
         top: `${top}%`,
         left: `${left}%`,
         transform: `translate(-50%, -50%)`,
-        ...style,
       }}
     >
-      {player ? (
-        <PitchPlayer player={player} showRatings={false} />
+      {position.player ? (
+        <PitchPlayer player={position.player} showRatings={false} />
       ) : (
-        <PositionInfo position={position} />
+        <PositionInfo position={position} isDropping={isOver} />
       )}
     </Box>
   );

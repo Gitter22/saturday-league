@@ -6,7 +6,7 @@ import {
     IMatchResult,
     IMatchTeam,
     ISeason,
-    ISeasonTeam,
+    ISeasonPlayer,
     ITournament,
     IUser,
     IVenue,
@@ -27,7 +27,7 @@ import liverpoollarge from '../../assets/teams/150/liverpool.png'
 import mancitylarge from '../../assets/teams/150/mancity.png'
 import manularge from '../../assets/teams/150/manu.png'
 import leagueLogo from "../../assets/leagues/premierleague.png"
-import { formations } from "../matches/formations"
+import { formations, positions } from "../matches/formations"
 
 
 
@@ -46,8 +46,8 @@ export const getRandomDate = (range: 'past' | 'future') => {
 }
 
 export const getFormationList = (): Formation[] => {
-    const formations: Formation[] = ['2-2-2', '0-3-2', '1-2-3', '1-3-2']
-    return formations
+    const formationsArray = Object.keys(formations)
+    return formationsArray
 }
 
 export const getRandomFormation = (): Formation => {
@@ -56,8 +56,8 @@ export const getRandomFormation = (): Formation => {
 }
 
 export const getPositionList = (): Position[] => {
-    const positions: Position[] = ['GK', 'LB', 'RB', 'CB', 'LM', 'RM', 'CM', 'LF', 'RF', 'CF']
-    return positions
+    const positionsArray = Object.keys(positions)
+    return positionsArray
 }
 
 export const getRandomPosition = (): Position => {
@@ -211,30 +211,26 @@ export const getUserList = (length: number = 5): IUser[] => {
     return new Array(length).fill(null).map(getRandomUser)
 }
 
-export const getRandomSeasonTeam = (): ISeasonTeam => {
-    const randomUser = getRandomUser()
+export const getRandomSeasonPlayer = (): ISeasonPlayer => {
+    const { username, id: userId, ...restUser } = getRandomUser()
     return {
-        ...randomUser,
+
+        id: getRandomNumberInRange(0, 500).toString(),
         tournamentId: getRandomNumberInRange(0, 125).toString(),
         seasonId: getRandomNumberInRange(0, 125).toString(),
-        userId: getRandomNumberInRange(0, 500).toString(),
+        userId: userId,
+        ...restUser,
     }
 }
 
-export const getSeasonTeamList = (length: number = 5): ISeasonTeam[] => {
-    return new Array(length).fill(null).map(getRandomSeasonTeam)
+export const getSeasonPlayerList = (length: number = 5): ISeasonPlayer[] => {
+    return new Array(length).fill(null).map(getRandomSeasonPlayer)
 }
 
 export const getRandomMatchPlayer = (): IMatchPlayer => {
-    const randomSeasonTeam = getRandomSeasonTeam()
+    const randomSeasonPlayer = getRandomSeasonPlayer()
     return {
-
-        seasonTeamId: randomSeasonTeam.id,
-        displayName: randomSeasonTeam.displayName,
-        kitNumber: randomSeasonTeam.kitNumber,
-        favClub: randomSeasonTeam.favClub,
-        captaincyTeamName: randomSeasonTeam.captaincyTeamName,
-        userId: randomSeasonTeam.userId,
+        ...randomSeasonPlayer,
         playstatus: Math.random() < 0.2 ? 'noshow' : 'played',
         position: getRandomPosition(),
         ratings: getRandomNumberInRange(0, 10),
@@ -244,7 +240,7 @@ export const getRandomMatchPlayer = (): IMatchPlayer => {
 export const getRandomMatchTeam = (): IMatchTeam => {
     const captainPlayer = getRandomMatchPlayer()
     return {
-        teamId: captainPlayer.seasonTeamId, //same as captain's ISeasonTeam id
+        teamId: captainPlayer.id, //same as captain's ISeasonTeam id
         name: captainPlayer.captaincyTeamName, //same as captaincyTeamName
         captainId: captainPlayer.userId, //same as captain's userId
         teamLogo: captainPlayer.favClub.logo.small ?? undefined,

@@ -1,7 +1,6 @@
-export type Formation = '2-2-2' | '0-3-2' | '1-2-3' | '1-3-2'
+export type Formation = string
 
-export type Position = 'GK' | 'LB' | 'RB' | 'CB' | 'LM' | 'RM' | 'CM' | 'LF' | 'RF' | 'CF'
-
+export type Position = string
 export type Awards = 'motm' | 'goldenBoot' | 'goldenGlove'
 
 export interface IClub {
@@ -53,31 +52,25 @@ export interface IUser {
     preferredPositions: Position[]
 }
 
-export interface ISeasonTeam extends Omit<IUser, 'username'> {
+export interface ISeasonPlayer extends Omit<IUser, 'username' | 'id'> {
+    id: string
     seasonId: ISeason['id']
     tournamentId: ITournament['id']
     userId: IUser['id']
 }
 
 
-export interface IMatchPlayer {
-    seasonTeamId: ISeasonTeam['id'], //same as ISeasonTeam id
-    displayName: ISeasonTeam['displayName'], //same ISeaonTeam name
-    kitNumber: number
-    favClub: IClub
-    captaincyTeamName: string
-    userId: string,
+export interface IMatchPlayer extends ISeasonPlayer {
     playstatus: 'played' | 'noshow'
     position: Position | null
     ratings: number | null
-
 }
 
 
 export interface IMatchTeam {
-    teamId: ISeasonTeam['id'], //same as captain's ISeasonTeam id
-    name: ISeasonTeam['captaincyTeamName'], //same as captaincyTeamName
-    captainId: ISeasonTeam['userId'] //same as captain's userId
+    teamId: ISeasonPlayer['id'], //same as captain's ISeasonTeam id
+    name: ISeasonPlayer['captaincyTeamName'], //same as captaincyTeamName
+    captainId: ISeasonPlayer['userId'] //same as captain's userId
     teamLogo: string | undefined
     formation: Formation | null
     lineup: IMatchPlayer[] | null
@@ -88,7 +81,7 @@ export interface IMatchResult {
     team2Score: number,
 }
 
-export interface IMatchAward extends Record<Awards, ISeasonTeam['id'][]> {
+export interface IMatchAward extends Record<Awards, ISeasonPlayer['id'][]> {
 }
 
 export type MatchStatus = 'Pending' | 'Completed' | 'Cancelled'

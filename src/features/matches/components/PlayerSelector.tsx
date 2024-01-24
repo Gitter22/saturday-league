@@ -10,13 +10,14 @@ import {
 } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { getUserList } from "../../shared/constants";
-import { IUser } from "../../shared/types";
+import { IMatchPlayer, ISeasonPlayer } from "../../shared/types";
 import { useDroppable } from "@dnd-kit/core";
 import { deepOrange, green } from "@mui/material/colors";
 import { IPosition } from "../formations";
+import { useDraggable } from "@dnd-kit/core";
 
 interface PlayerLogo extends AvatarProps {
-  player: IUser;
+  player: ISeasonPlayer;
 }
 const PlayerLogo: React.FC<PlayerLogo> = ({ player, ...props }) => {
   return (
@@ -56,7 +57,7 @@ const PlayerRating: React.FC<PlayerRating> = ({ rating, ...props }) => {
 };
 
 interface PlayerKitNumber extends AvatarProps {
-  player: IUser;
+  player: ISeasonPlayer;
 }
 
 const PlayerKitNumber: React.FC<PlayerKitNumber> = ({ player, ...props }) => {
@@ -92,12 +93,23 @@ const PlayerName: React.FC<PropsWithChildren<IPlayerName>> = ({
 
 interface IPositionInfo extends AvatarProps {
   position: IPosition;
+  isDropping: boolean;
 }
 
-export const PositionInfo: React.FC<IPositionInfo> = ({ position }) => {
+export const PositionInfo: React.FC<IPositionInfo> = ({
+  position,
+  isDropping,
+}) => {
   return (
     <Avatar
-      sx={{ width: 40, height: 40, backgroundColor: "gray" }}
+      sx={{
+        width: 40,
+        height: 40,
+        backgroundColor: isDropping ? green["A400"] : "gray",
+        fontSize: "1em",
+        lineHeight: 0,
+        border: isDropping ? "3px solid #FFF" : undefined,
+      }}
       alt={position.id}
     >
       {position?.id}
@@ -106,7 +118,7 @@ export const PositionInfo: React.FC<IPositionInfo> = ({ position }) => {
 };
 
 interface IPitchPlayer {
-  player: IUser;
+  player: IMatchPlayer;
   showRatings: boolean;
 }
 
@@ -118,9 +130,9 @@ export const PitchPlayer: React.FC<IPitchPlayer> = ({
     <Stack direction="column" alignItems={"center"}>
       <Stack direction="row" alignItems={"center"} spacing={0.5}>
         {showRatings ? (
-          <Box sx={{ width: 12, height: 24, visibility: "hidden" }} />
-        ) : (
           <PlayerRating rating={7} />
+        ) : (
+          <Box sx={{ width: 12, height: 24, visibility: "hidden" }} />
         )}
         <PlayerLogo player={player} />
       </Stack>
@@ -133,13 +145,22 @@ export const PitchPlayer: React.FC<IPitchPlayer> = ({
 };
 
 interface IPlayerSelectorItemProps {
-  player: IUser;
+  player: ISeasonPlayer;
 }
 export const PlayerSelectorItem: React.FC<IPlayerSelectorItemProps> = ({
   player,
 }) => {
+  const { setNodeRef, listeners, attributes } = useDraggable({
+    id: player.id,
+  });
   return (
-    <Stack direction="column" alignItems={"center"}>
+    <Stack
+      direction="column"
+      alignItems={"center"}
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+    >
       <PlayerLogo player={player} />
       <PlayerName>{player.displayName.slice(0, 10)}</PlayerName>
     </Stack>
@@ -147,7 +168,7 @@ export const PlayerSelectorItem: React.FC<IPlayerSelectorItemProps> = ({
 };
 
 interface IProps {
-  players: IUser[];
+  players: ISeasonPlayer[];
 }
 
 const PlayerSelector: React.FC<IProps> = ({ players }) => {
